@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.github.se.cyrcle.ui.map.overlay.AddButton
 import com.github.se.cyrcle.ui.map.overlay.ZoomControls
-import com.github.se.cyrcle.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.cyrcle.ui.navigation.NavigationActions
 import com.github.se.cyrcle.ui.navigation.Route
 import com.github.se.cyrcle.ui.theme.molecules.BottomNavigationBar
@@ -34,39 +33,33 @@ fun MapScreen(navigationActions: NavigationActions) {
     }
   }
 
-  Scaffold(
-      bottomBar = {
-        BottomNavigationBar(
-            onTabSelect = { navigationActions.navigateTo(it) },
-            tabList = LIST_TOP_LEVEL_DESTINATION,
-            selectedItem = Route.MAP)
-      }) { padding ->
-        MapboxMap(
-            Modifier.fillMaxSize().padding(padding).testTag("MapScreen"),
-            mapViewportState = mapViewportState,
-            style = { MapStyle("mapbox://styles/seanprz/cm27wh9ff00jl01r21jz3hcb1") })
+  Scaffold(bottomBar = { BottomNavigationBar(navigationActions, selectedItem = Route.MAP) }) {
+      padding ->
+    MapboxMap(
+        Modifier.fillMaxSize().padding(padding).testTag("MapScreen"),
+        mapViewportState = mapViewportState,
+        style = { MapStyle("mapbox://styles/seanprz/cm27wh9ff00jl01r21jz3hcb1") })
 
-        Column(
-            Modifier.padding(padding).fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween) {
-              Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                ZoomControls(
-                    onZoomIn = {
-                      mapViewportState.setCameraOptions {
-                        zoom(mapViewportState.cameraState!!.zoom + 1.0)
-                      }
-                    },
-                    onZoomOut = {
-                      mapViewportState.setCameraOptions {
-                        zoom(mapViewportState.cameraState!!.zoom - 1.0)
-                      }
-                    })
-              }
-              Row(
-                  Modifier.padding(top = 16.dp).fillMaxWidth(),
-                  horizontalArrangement = Arrangement.Start) {
-                    AddButton { println("Add button clicked") }
+    Column(
+        Modifier.padding(padding).fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+          Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            ZoomControls(
+                onZoomIn = {
+                  mapViewportState.setCameraOptions {
+                    zoom(mapViewportState.cameraState!!.zoom + 1.0)
                   }
-            }
-      }
+                },
+                onZoomOut = {
+                  mapViewportState.setCameraOptions {
+                    zoom(mapViewportState.cameraState!!.zoom - 1.0)
+                  }
+                })
+          }
+          Row(
+              Modifier.padding(top = 16.dp).fillMaxWidth(),
+              horizontalArrangement = Arrangement.Start) {
+                AddButton { println("Add button clicked") }
+              }
+        }
+  }
 }

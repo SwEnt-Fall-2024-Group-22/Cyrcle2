@@ -2,20 +2,43 @@ package com.github.se.cyrcle.ui.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.github.se.cyrcle.model.parking.*
-import com.github.se.cyrcle.ui.navigation.LIST_TOP_LEVEL_DESTINATION
+import com.github.se.cyrcle.model.parking.Location
+import com.github.se.cyrcle.model.parking.Parking
+import com.github.se.cyrcle.model.parking.ParkingCapacity
+import com.github.se.cyrcle.model.parking.ParkingProtection
+import com.github.se.cyrcle.model.parking.ParkingRackType
+import com.github.se.cyrcle.model.parking.Point
 import com.github.se.cyrcle.ui.navigation.NavigationActions
 import com.github.se.cyrcle.ui.navigation.Screen
 import com.github.se.cyrcle.ui.theme.DarkBlue
@@ -357,70 +380,63 @@ fun SpotListScreen(
               }
               .thenBy { (_, distance) -> distance })
 
-  Scaffold(
-      bottomBar = {
-        BottomNavigationBar(
-            onTabSelect = { navigationActions.navigateTo(it) },
-            tabList = LIST_TOP_LEVEL_DESTINATION,
-            selectedItem = Screen.LIST)
-      }) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(bottom = 16.dp),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)) {
-              item {
-                FilterHeader(
-                    selectedProtection = selectedProtection,
-                    onProtectionSelected = { protection ->
-                      selectedProtection =
-                          if (selectedProtection.contains(protection)) {
-                            selectedProtection - protection
-                          } else {
-                            selectedProtection + protection
-                          }
-                    },
-                    selectedRackTypes = selectedRackTypes,
-                    onRackTypeSelected = { rackType ->
-                      selectedRackTypes =
-                          if (selectedRackTypes.contains(rackType)) {
-                            selectedRackTypes - rackType
-                          } else {
-                            selectedRackTypes + rackType
-                          }
-                    },
-                    selectedCapacities = selectedCapacities,
-                    onCapacitySelected = { capacity ->
-                      selectedCapacities =
-                          if (selectedCapacities.contains(capacity)) {
-                            selectedCapacities - capacity
-                          } else {
-                            selectedCapacities + capacity
-                          }
-                    })
-              }
-              items(sortedFilteredParkingSpots) { (parking, distance) ->
-                val matchedCriteria = mutableListOf<String>()
+  Scaffold(bottomBar = { BottomNavigationBar(navigationActions, selectedItem = Screen.LIST) }) {
+      innerPadding ->
+    LazyColumn(
+        modifier = Modifier.fillMaxSize().padding(innerPadding).padding(bottom = 16.dp),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)) {
+          item {
+            FilterHeader(
+                selectedProtection = selectedProtection,
+                onProtectionSelected = { protection ->
+                  selectedProtection =
+                      if (selectedProtection.contains(protection)) {
+                        selectedProtection - protection
+                      } else {
+                        selectedProtection + protection
+                      }
+                },
+                selectedRackTypes = selectedRackTypes,
+                onRackTypeSelected = { rackType ->
+                  selectedRackTypes =
+                      if (selectedRackTypes.contains(rackType)) {
+                        selectedRackTypes - rackType
+                      } else {
+                        selectedRackTypes + rackType
+                      }
+                },
+                selectedCapacities = selectedCapacities,
+                onCapacitySelected = { capacity ->
+                  selectedCapacities =
+                      if (selectedCapacities.contains(capacity)) {
+                        selectedCapacities - capacity
+                      } else {
+                        selectedCapacities + capacity
+                      }
+                })
+          }
+          items(sortedFilteredParkingSpots) { (parking, distance) ->
+            val matchedCriteria = mutableListOf<String>()
 
-                if (selectedProtection.isNotEmpty() &&
-                    selectedProtection.contains(parking.protection)) {
-                  matchedCriteria.add("Protection: ${parking.protection}")
-                }
-                if (selectedRackTypes.isNotEmpty() &&
-                    selectedRackTypes.contains(parking.rackType)) {
-                  matchedCriteria.add("Rack Type: ${parking.rackType}")
-                }
-                if (selectedCapacities.isNotEmpty() &&
-                    selectedCapacities.contains(parking.capacity)) {
-                  matchedCriteria.add("Capacity: ${parking.capacity}")
-                }
-
-                SpotCard(navigationActions, parking, distance, matchedCriteria)
-              }
+            if (selectedProtection.isNotEmpty() &&
+                selectedProtection.contains(parking.protection)) {
+              matchedCriteria.add("Protection: ${parking.protection}")
             }
-      }
+            if (selectedRackTypes.isNotEmpty() && selectedRackTypes.contains(parking.rackType)) {
+              matchedCriteria.add("Rack Type: ${parking.rackType}")
+            }
+            if (selectedCapacities.isNotEmpty() && selectedCapacities.contains(parking.capacity)) {
+              matchedCriteria.add("Capacity: ${parking.capacity}")
+            }
+
+            SpotCard(navigationActions, parking, distance, matchedCriteria)
+          }
+        }
+  }
 }
 
-// Extension fuction to toggle selection
+// Extension function to toggle selection
 fun <T> Set<T>.toggle(item: T): Set<T> {
   return if (this.contains(item)) this - item else this + item
 }
