@@ -1,14 +1,12 @@
 package com.github.se.cyrcle.model.parking
 
-import com.mapbox.geojson.Point
-
 object TestInstancesParking {
   val parking1 =
       Parking(
           "Test_spot_1",
           null,
           null,
-          Location(Point.fromLngLat(6.6, 46.2)),
+          Location(Point(46.2, 6.6)),
           listOf(
               "https://en.wikipedia.org/wiki/Bicycle_parking#/media/File:Bicycle_parking_at_Alewife_station,_August_2001.jpg"),
           ParkingCapacity.LARGE,
@@ -21,7 +19,7 @@ object TestInstancesParking {
           "Test_spot_2",
           null,
           null,
-          Location(Point.fromLngLat(6.7, 46.3)),
+          Location(Point(46.3, 6.7)),
           listOf(
               "https://en.wikipedia.org/wiki/Bicycle_parking#/media/File:Bicycle_parking_at_Alewife_station,_August_2001.jpg"),
           ParkingCapacity.SMALL,
@@ -34,7 +32,7 @@ object TestInstancesParking {
           "Test_spot_3",
           null,
           null,
-          Location(Point.fromLngLat(7.1, 47.1)),
+          Location(Point(47.1, 7.1)),
           listOf(
               "https://en.wikipedia.org/wiki/Bicycle_parking#/media/File:Bicycle_parking_at_Alewife_station,_August_2001.jpg"),
           ParkingCapacity.LARGE,
