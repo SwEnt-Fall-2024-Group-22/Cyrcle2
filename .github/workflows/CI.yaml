@@ -130,7 +130,8 @@ jobs:
           ls -la app/build/
           echo "LS APP/BUILD/TEST-RESULTS"
           ls -la app/build/test-results
-          echo "LS APP/BUILD/TEST"
+          echo "LS APP/BUILD/TEST-RESULTS/testDebugUnitTest"
+          ls -la app/build/test-results/testDebugUnitTest
 
       # Upload the various reports to sonar
       - name: Upload report to SonarCloud
