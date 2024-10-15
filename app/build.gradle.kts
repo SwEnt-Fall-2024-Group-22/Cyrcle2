@@ -195,8 +195,8 @@ dependencies {
     implementation(libs.material)
 
     // MapBox API
-    implementation (libs.extension.maps.compose)
-    implementation(libs.android)
+    implementation ("com.mapbox.extension:maps-compose:11.7.0")
+    implementation("com.mapbox.maps:android:11.7.0")
 
     // Coil
     implementation(libs.coil.compose)
