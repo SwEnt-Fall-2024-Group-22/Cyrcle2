@@ -212,7 +212,6 @@ dependencies {
     implementation(libs.maps.compose.utils)
     implementation(libs.play.services.auth)
 
-
     // add material icons
     implementation(libs.androidx.material.icons.extended)
     // Firebase
