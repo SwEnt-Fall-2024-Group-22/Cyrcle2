@@ -120,7 +120,7 @@ jobs:
 
       - name: Sloppy copy for SonarCloud
         run: |
-          cp -r app/build/test-results/testDebugUnitTest/ .
+          cp -r app/build/test-results/testDebugUnitTest/ app/
 
       # Upload the various reports to sonar
       - name: Upload report to SonarCloud
