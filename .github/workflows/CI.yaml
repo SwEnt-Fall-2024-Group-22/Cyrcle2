@@ -118,20 +118,9 @@ jobs:
         run: |
           ./gradlew jacocoTestReport
 
-      - name: Debug step
+      - name: Sloppy copy for SonarCloud
         run: |
-          echo "PWD"
-          pwd
-          echo "LS local"
-          ls -la
-          echo "LS APP/"
-          ls -la app/
-          echo "LS APP/BUILD/"
-          ls -la app/build/
-          echo "LS APP/BUILD/TEST-RESULTS"
-          ls -la app/build/test-results
-          echo "LS APP/BUILD/TEST-RESULTS/testDebugUnitTest"
-          ls -la app/build/test-results/testDebugUnitTest
+          cp -r app/build/test-results/testDebugUnitTest/ .
 
       # Upload the various reports to sonar
       - name: Upload report to SonarCloud
