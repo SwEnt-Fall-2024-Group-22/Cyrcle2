@@ -121,7 +121,7 @@ jobs:
       - name: Sloppy copy for SonarCloud
         run: |
           pwd
-          ls -la app/built/test-results/testDebugUnitTest/
+          ls -la app/build/test-results/testDebugUnitTest/
           cp -r app/build/test-results/testDebugUnitTest/ app/
           cp -r app/build/test-results/testDebugUnitTest/ /home/runner/work/Cyrcle2/Cyrcle2/app/
           ls -la /home/runner/work/Cyrcle2/Cyrcle2/app
