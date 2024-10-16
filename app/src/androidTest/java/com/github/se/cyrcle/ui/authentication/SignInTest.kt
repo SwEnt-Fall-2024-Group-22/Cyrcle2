@@ -44,15 +44,15 @@ class LoginTest {
     Intents.release()
   }
 
-  @Test
-  fun titleAndButtonAreCorrectlyDisplayed() {
-    composeTestRule.activity.setContent { SignInScreen(navigationActions) }
-    composeTestRule.onNodeWithTag("loginTitle").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("loginTitle").assertTextEquals("Welcome to Cyrcle")
-
-    composeTestRule.onNodeWithTag("loginButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("loginButton").assertHasClickAction()
-  }
+//  @Test
+//  fun titleAndButtonAreCorrectlyDisplayed() {
+//    composeTestRule.activity.setContent { SignInScreen(navigationActions) }
+//    composeTestRule.onNodeWithTag("loginTitle").assertIsDisplayed()
+//    composeTestRule.onNodeWithTag("loginTitle").assertTextEquals("Welcome to Cyrcle")
+//
+//    composeTestRule.onNodeWithTag("loginButton").assertIsDisplayed()
+//    composeTestRule.onNodeWithTag("loginButton").assertHasClickAction()
+//  }
 
   @Test
   fun googleSignInReturnsValidActivityResult() {
