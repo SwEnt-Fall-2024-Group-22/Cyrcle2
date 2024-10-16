@@ -122,8 +122,8 @@ jobs:
         run: |
           pwd
           ls -la app/build/test-results/testDebugUnitTest/
-          cp app/build/test-results/testDebugUnitTest/* app/
-          cp app/build/test-results/testDebugUnitTest/* /home/runner/work/Cyrcle2/Cyrcle2/app/
+          cp -r app/build/test-results/testDebugUnitTest/* app/
+          cp -r app/build/test-results/testDebugUnitTest/* /home/runner/work/Cyrcle2/Cyrcle2/app/
           ls -la /home/runner/work/Cyrcle2/Cyrcle2/app/
 
       # Upload the various reports to sonar
