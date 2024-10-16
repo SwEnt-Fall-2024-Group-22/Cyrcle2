@@ -124,6 +124,7 @@ jobs:
           ls -la app/build/test-results/testDebugUnitTest/
           cp -r app/build/test-results/testDebugUnitTest/* app/
           cp -r app/build/test-results/testDebugUnitTest/* /home/runner/work/Cyrcle2/Cyrcle2/app/
+          cp -r app/build/test-results/testDebugUnitTest/* /home/runner/work/Cyrcle2/Cyrcle2/app/build/reports/androidTests/connected/debug/* 
           ls -la /home/runner/work/Cyrcle2/Cyrcle2/app/
 
       # Upload the various reports to sonar
