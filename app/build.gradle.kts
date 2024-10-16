@@ -26,6 +26,8 @@ android {
     val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
 
 
+
+
     defaultConfig {
         applicationId = "com.github.se.cyrcle"
         minSdk = 29
@@ -39,6 +41,27 @@ android {
         }
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
+
+    // This block was added to read the mapbox_access_token from local.properties and write mapbox_access_token.xml
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
+    }
+
+    val mapboxAccessToken = localProperties.getProperty("MAPBOX_ACCESS_TOKEN")
+    if (mapboxAccessToken != null) {
+        val mapboxAccessTokenXmlFile = file("src/main/res/values/mapbox_access_token.xml")
+        val mapboxAccessTokenXmlContent = """
+            <?xml version="1.0" encoding="utf-8"?>
+            <resources xmlns:tools="http://schemas.android.com/tools">
+                <string name="mapbox_access_token" translatable="false" tools:ignore="UnusedResources">$mapboxAccessToken</string>
+            </resources>
+        """.trimIndent()
+
+        mapboxAccessTokenXmlFile.writeText(mapboxAccessTokenXmlContent)
+    } else {
+        throw GradleException("mapbox_access_token not found in local.properties")
+    }
+
 
     buildTypes {
         release {
@@ -269,7 +292,7 @@ sonar {
         property("sonar.organization", "swent-fall-2024-group-22")
         property("sonar.host.url", "https://sonarcloud.io")
         // Comma-separated paths to the various directories containing the *.xml JUnit report files. Each path may be absolute or relative to the project base directory.
-        property("sonar.junit.reportPaths", "${project.layout.buildDirectory.get()}/test-results/testDebugUnitTest/")
+        property("sonar.junit.reportPaths", "${project.layout.buildDirectory.get()}test-results/testDebugUnitTest/")
         // Paths to xml files with Android Lint issues. If the main flavor is changed, this file will have to be changed too.
         property("sonar.androidLint.reportPaths", "${project.layout.buildDirectory.get()}/reports/lint-results-debug.xml")
         // Paths to JaCoCo XML coverage report files.
