@@ -8,6 +8,7 @@ json = "20240303"
 kotlin = "1.9.0"
 gms = "4.4.2"
 ktfmt = "0.17.0"
+sonarqube = "4.0.0.2929"
 
 # UI Compose
 mapboxSdkTurf = "5.8.0"
@@ -133,3 +134,4 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ktfmt = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }
+sonar = { id = "org.sonarqube", version.ref = "sonarqube" }
