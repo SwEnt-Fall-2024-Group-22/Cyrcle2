@@ -50,5 +50,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v3
       with:
-        name: app-release-${{ github.event.inputs.version_name }}
+        name: app-release-${{ github.event.inputs.version_code }}
         path: app/build/outputs/apk/release/*.apk
