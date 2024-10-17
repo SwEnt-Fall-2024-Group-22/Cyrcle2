@@ -45,10 +45,6 @@ jobs:
       - name: Create ZIP of Source Code
         run: |
           zip -r source_code.zip . -x '*.git*' -x 'app/build/*' -x '.gradle/*' -x 'app/gradle/*' -x 'gradlew*' -x 'gradle/wrapper/*' -x '.github/workflows/*' -x 'local.properties' -x 'google-service.json' -x 'app/src/main/res/values/mapbox_access_token.xml'
-          pwd
-          ls .
-          ls ./build/
-          ls ./build/outputs/
       #    mv source_code.zip ./build/outputs/source_code.zip
 
       - name: Upload APK and ZIP
