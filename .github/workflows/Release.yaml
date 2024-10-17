@@ -40,17 +40,20 @@ jobs:
           java-version: "17"
 
       - name: Build APK
-        run: ./gradlew assembleRelease
+        run: |
+          ./gradlew assembleRelease
+          mv app/build/outputs/apk/release/*.apk .
 
       - name: Create ZIP of Source Code
         run: |
-          zip -r source_code.zip . -x '*.git*' -x 'app/build/*' -x '.gradle/*' -x 'app/gradle/*' -x 'gradlew*' -x 'gradle/wrapper/*' -x '.github/workflows/*' -x 'local.properties' -x 'google-service.json' -x 'app/src/main/res/values/mapbox_access_token.xml'
-      #    mv source_code.zip ./build/outputs/source_code.zip
+          zip -r source_code.zip . -x '*.git*' -x 'app/build/*' -x '.gradle/*' -x 'app/gradle/*' -x 'gradlew*' -x 'gradle/wrapper/*' -x '.github/workflows/*' -x 'local.properties' -x 'app/google-services.json' -x 'app/src/main/res/values/mapbox_access_token.xml'
+
+      - name: Move
 
       - name: Upload APK and ZIP
         uses: actions/upload-artifact@v4
         with:
           name: release-artifacts
           path: |
-            app/build/outputs/apk/release/*.apk
+            *.apk
             source_code.zip
