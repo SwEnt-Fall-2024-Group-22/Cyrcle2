@@ -44,13 +44,17 @@ jobs:
 
       - name: Create ZIP of Source Code
         run: |
-          zip -r source_code.zip . -x '*.git*' -x 'build/*' -x '.gradle/*' -x 'gradlew*' -x 'gradle/wrapper/*' -x '.github/workflows/*' -x 'local.properties' -x 'google-service.json' -x 'app/src/main/res/values/mapbox_access_token.xml'  # Secret
-          mv source_code.zip ./build/outputs/source_code.zip  # Move ZIP to outputs directory
+          zip -r source_code.zip . -x '*.git*' -x 'build/*' -x '.gradle/*' -x 'gradlew*' -x 'gradle/wrapper/*' -x '.github/workflows/*' -x 'local.properties' -x 'google-service.json' -x 'app/src/main/res/values/mapbox_access_token.xml'
+          pwd
+          ls .
+          ls ./build/
+          ls ./build/outputs/
+          mv source_code.zip ./build/outputs/source_code.zip
 
       - name: Upload APK and ZIP
         uses: actions/upload-artifact@v4
         with:
           name: release-artifacts
           path: |
-            app/build/outputs/apk/release/*.apk  # Adjust the path as needed
+            app/build/outputs/apk/release/*.apk
             build/outputs/source_code.zip
