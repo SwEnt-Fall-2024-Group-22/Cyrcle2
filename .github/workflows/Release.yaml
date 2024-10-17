@@ -13,52 +13,48 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: PWD
+      - name: Enable KVM group perms
         run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Grant execute permission for gradlew
+        run: |
+          chmod +x ./gradlew
+
+      - name: Decode secrets
+        env:
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+        run: |
+          echo "$GOOGLE_SERVICES" | base64 --decode > ./app/google-services.json
+          echo "$LOCAL_PROPERTIES" | base64 --decode > ./local.properties
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Build APK
+        run: ./gradlew assembleRelease
+
+      - name: Create ZIP of Source Code
+        run: |
+          zip -r source_code.zip . -x '*.git*' -x 'app/build/*' -x '.gradle/*' -x 'app/gradle/*' -x 'gradlew*' -x 'gradle/wrapper/*' -x '.github/workflows/*' -x 'local.properties' -x 'google-service.json' -x 'app/src/main/res/values/mapbox_access_token.xml'
           pwd
-
-#      - name: Enable KVM group perms
-#        run: |
-#          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-#          sudo udevadm control --reload-rules
-#          sudo udevadm trigger --name-match=kvm
-#
-#      - name: Grant execute permission for gradlew
-#        run: |
-#          chmod +x ./gradlew
-#
-#      - name: Decode secrets
-#        env:
-#          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-#          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
-#          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-#          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
-#        run: |
-#          echo "$GOOGLE_SERVICES" | base64 --decode > ./app/google-services.json
-#          echo "$LOCAL_PROPERTIES" | base64 --decode > ./local.properties
-#
-#      - name: Setup JDK
-#        uses: actions/setup-java@v4
-#        with:
-#          distribution: "temurin"
-#          java-version: "17"
-#
-#      - name: Build APK
-#        run: ./gradlew assembleRelease
-
-      #- name: Create ZIP of Source Code
-      #  run: |
-      #    zip -r source_code.zip . -x '*.git*' -x 'build/*' -x '.gradle/*' -x 'gradlew*' -x 'gradle/wrapper/*' -x '.github/workflows/*' -x 'local.properties' -x 'google-service.json' -x 'app/src/main/res/values/mapbox_access_token.xml'
-      #    pwd
-      #    ls .
-      #    ls ./build/
-      #    ls ./build/outputs/
+          ls .
+          ls ./build/
+          ls ./build/outputs/
       #    mv source_code.zip ./build/outputs/source_code.zip
 
-#      - name: Upload APK and ZIP
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: release-artifacts
-#          path: |
-#            app/build/outputs/apk/release/*.apk
-#            build/outputs/source_code.zip
+      - name: Upload APK and ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            app/build/outputs/apk/release/*.apk
+            source_code.zip
