@@ -1,0 +1,40 @@
+name: Release Workflow
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Build APK
+        run: ./gradlew assembleRelease
+
+      - name: Create ZIP of Source Code
+        run: |
+          zip -r source_code.zip . \
+          -x '*.git*' \
+          -x 'gradlew*' \
+          -x 'gradle/wrapper/*' \
+          -x '.github/workflows/*'
+          mv source_code.zip ./build/outputs/source_code.zip  # Move ZIP to outputs directory
+
+      - name: Upload APK and ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            app/build/outputs/apk/release/*.apk  # Adjust the path as needed
+            build/outputs/source_code.zip
