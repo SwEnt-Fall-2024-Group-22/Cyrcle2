@@ -1,7 +1,5 @@
 package com.github.se.cyrcle.model.parking
 
-import com.mapbox.geojson.Point
-
 interface ParkingRepository {
   /**
    * Get a new unique identifier for a parking

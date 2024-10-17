@@ -7,7 +7,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestoreSettings
 import com.google.firebase.firestore.memoryCacheSettings
 import com.google.firebase.firestore.persistentCacheSettings
-import com.mapbox.geojson.Point
 import java.util.concurrent.CountDownLatch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
@@ -75,8 +74,8 @@ class ParkingRepositoryFirestoreTest {
   fun getParkingsBetweenTest() = runBlocking {
     val countDownLatch = CountDownLatch(1)
     parkingRepositoryFirestore.getParkingsBetween(
-        Point.fromLngLat(6.0, 46.0),
-        Point.fromLngLat(7.0, 47.0),
+        Point(46.0, 6.0),
+        Point(47.0, 7.0),
         { parkings ->
           assert(parkings.size == 2)
           assert(parkings.contains(TestInstancesParking.parking1))
@@ -94,7 +93,7 @@ class ParkingRepositoryFirestoreTest {
 
     // Get the two closest parkings to the location
     parkingRepositoryFirestore.getKClosestParkings(
-        Point.fromLngLat(7.1, 47.1),
+        Point(47.1, 7.1),
         0,
         { parkings ->
           assert(parkings.isEmpty())
@@ -110,7 +109,7 @@ class ParkingRepositoryFirestoreTest {
     val latch = CountDownLatch(1)
     // Get the closest parkings to the location
     parkingRepositoryFirestore.getKClosestParkings(
-        Point.fromLngLat(7.1, 47.1),
+        Point(47.1, 7.1),
         1,
         { parkings ->
           assert(parkings.size == 1)
@@ -127,7 +126,7 @@ class ParkingRepositoryFirestoreTest {
     val latch = CountDownLatch(1)
     // Get the two closest parkings to the location
     parkingRepositoryFirestore.getKClosestParkings(
-        Point.fromLngLat(6.9, 46.69),
+        Point(46.69, 6.9),
         2,
         { parkings ->
           assert(parkings.size == 2)
@@ -145,7 +144,7 @@ class ParkingRepositoryFirestoreTest {
     val latch = CountDownLatch(1)
     // Get the two closest parkings to the location
     parkingRepositoryFirestore.getKClosestParkings(
-        Point.fromLngLat(6.7, 46.9),
+        Point(46.9, 6.7),
         2,
         { parkings ->
           assert(parkings.size == 1)
@@ -153,7 +152,5 @@ class ParkingRepositoryFirestoreTest {
           latch.countDown()
         },
         { fail("Failed to get parkings") })
-
-    latch.await()
   }
 }
