@@ -47,8 +47,13 @@ jobs:
         VERSION_CODE: ${{ github.event.inputs.version_code }}
     - name: Find APK
       run: find . -name "*.apk" -type f
-    - name: Upload APK
+      
+    - name: Rename APK
+      run: |
+        mv app/build/outputs/apk/debug/*.apk app/build/outputs/apk/debug/app-release-${{ github.event.inputs.version_name }}-${{ github.event.inputs.version_code }}.apk
+
+    - name: Upload renamed APK
       uses: actions/upload-artifact@v3
       with:
-        name: app-release-${{ github.event.inputs.version_code }}
-        path: app/build/outputs/apk/debug/*.apk
+        name: app-release-${{ github.event.inputs.version_name }}-${{ github.event.inputs.version_code }}
+        path: app/build/outputs/apk/debug/app-release-${{ github.event.inputs.version_name }}-${{ github.event.inputs.version_code }}.apk
